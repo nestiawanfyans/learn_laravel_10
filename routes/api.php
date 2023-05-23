@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\api\auth\SignInController;
 use App\Http\Controllers\api\auth\SignUpController;
+use App\Http\Controllers\api\profile\ProfileController;
 use App\Http\Controllers\api\v1\CompleteTaskController;
 use App\Http\Controllers\api\v1\TaskController;
 use Illuminate\Http\Request;
@@ -45,7 +46,10 @@ route::prefix("/auth")->group(function () {
     route::controller(SignInController::class)->group(function() {
         route::post("/signin", "index")->name("signin");
     });
-
 });
+
+Route::prefix('/profile')->controller(ProfileController::class)->group(function() {
+    route::get('/indentity', 'index')->name('profile.identity');
+})->middleware('auth:api');
 
 
