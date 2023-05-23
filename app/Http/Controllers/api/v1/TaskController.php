@@ -7,6 +7,7 @@ use App\Http\Requests\StoretaskRequest;
 use App\Http\Requests\UpdatetaskRequest;
 use App\Http\Resources\TaskResource;
 use App\Models\Task;
+use Illuminate\Http\JsonResponse;
 
 class TaskController extends Controller
 {
@@ -30,7 +31,7 @@ class TaskController extends Controller
     /**
      * Display the specified resource.
      */
-    public function show(Task $task)
+    public function show(Task $task): TaskResource
     {
         return TaskResource::make($task);
     }
@@ -47,9 +48,9 @@ class TaskController extends Controller
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(Task $task)
+    public function destroy(Task $task): JsonResponse
     {
         $task->delete();
-        return response()->noContent();
+        return response()->json(["Message" => "Success Delete Data"], 200);
     }
 }

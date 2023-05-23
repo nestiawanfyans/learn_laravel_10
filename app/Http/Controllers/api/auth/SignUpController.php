@@ -10,7 +10,7 @@ use Illuminate\Http\Request;
 
 class SignUpController extends Controller
 {
-    public function store(StoreSignUpRequest $request)
+    public function store(StoreSignUpRequest $request): SignUpResource
     {
         $signUp = User::create($request->validated());
 
