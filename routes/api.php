@@ -3,6 +3,7 @@
 use App\Http\Controllers\api\auth\SignInController;
 use App\Http\Controllers\api\auth\SignUpController;
 use App\Http\Controllers\api\profile\ProfileController;
+use App\Http\Controllers\api\users\UserController;
 use App\Http\Controllers\api\v1\CompleteTaskController;
 use App\Http\Controllers\api\v1\TaskController;
 use Illuminate\Http\Request;
@@ -30,8 +31,16 @@ route::prefix("/v1")->group(function () {
         route::get("/task", "index")->name("task.index");
         route::get("/task/{task}", "show")->name("task.show");
         route::post("/task", "store")->name("task.store");
-        route::put("task/{task}", "up date")->name("task.update");
+        route::put("task/{task}", "update")->name("task.update");
         route::delete("task/{task}", "destroy")->name("task.delete");
+    });
+});
+
+route::prefix("/data")->group(function () {
+    route::controller(UserController::class)->group(function () {
+        route::get("/users", "index")->name("user.all.data");
+        route::get("/detail/users/{id}", "show")->name("user.detail.data");
+        route::put("/users/{id}","update")->name("user.update.data");
     });
 });
 
