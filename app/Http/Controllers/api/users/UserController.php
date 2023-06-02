@@ -8,8 +8,10 @@ use App\Http\Requests\user\UpdateUserRequest;
 use App\Http\Resources\users\UserResource;
 use App\Models\User;
 use App\Repository\UserRepository;
+use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\Http\Resources\Json\AnonymousResourceCollection;
+use Illuminate\Support\Facades\Gate;
 
 class UserController extends Controller
 {
@@ -48,10 +50,13 @@ class UserController extends Controller
     /**
      * Display the specified resource.
      */
-    public function show(string $id): UserResource
+    public function show(string $id)
     {
         $data = $this->user->detailUser($id);
-        return UserResource::make($data);
+        return match (true){
+            $data != false => UserResource::make($data),
+            $data == false => response()->json(['Message' => 'User Not Found'], 404),
+        };
     }
 
     /**
@@ -65,8 +70,13 @@ class UserController extends Controller
     /**
      * Update the specified resource in storage.
      */
-    public function update(string $id, UpdateUserRequest $request, User $user): UserResource
+    public function update(string $id, UpdateUserRequest $request): UserResource|JsonResponse|User
     {
+        $dataUser = $this->user->detailUser($id);
+        if(!$dataUser){
+            return response()->json(['Message' => 'User Not Found'], 404);
+        }
+
         $data = $this->user->update($id, $request);
         return UserResource::make($data);
     }

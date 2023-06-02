@@ -7,6 +7,7 @@ use App\Http\Requests\user\UpdateUserRequest;
 use App\Models\User;
 use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Http\JsonResponse;
+use Illuminate\Support\Facades\Gate;
 
 class UserRepository implements UsersContracts {
 
@@ -15,10 +16,13 @@ class UserRepository implements UsersContracts {
         return User::all();
     }
 
-    public function detailUser(string $id): User
+    public function detailUser(string $id): User|bool
     {
         $detailUser = User::find($id);
-        return $detailUser;
+        return match ($detailUser != null) {
+            true => $detailUser,
+            false => false
+        };
     }
 
     public function update(string $id, UpdateUserRequest $request): User|JsonResponse
@@ -27,7 +31,7 @@ class UserRepository implements UsersContracts {
         $update = User::findOrFail($id)->update($request->all());
         return match ($update) {
             true => User::find($id),
-            false => response()->json(['Message' => "Error Login!!!"], 401),
+            false => response()->json(['Message' => "404 Not Found"], 404),
         };
     }
 

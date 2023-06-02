@@ -9,6 +9,6 @@ use Illuminate\Http\JsonResponse;
 
 interface UsersContracts {
     public function allUser(): Collection;
-    public function detailUser(string $id): User;
+    public function detailUser(string $id): User|bool;
     public function update(string $id, UpdateUserRequest $data): User|JsonResponse;
 }
