@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\Client\User\UserController;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -15,4 +16,14 @@ use Illuminate\Support\Facades\Route;
 
 Route::get('/', function () {
     return view('welcome');
+})->name("welcome");
+
+route::middleware("auth")->group(function () {
+    route::controller(UserController::class)->group(function (){
+        route::get("/users", "viewUser")->name("client.users");
+    });
 });
+
+route::get('/login', function (){
+    return "is Login";
+})->name("login.user");
